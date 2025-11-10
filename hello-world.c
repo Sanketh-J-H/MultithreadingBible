@@ -1,8 +1,21 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <unistd.h>
+#include <stdio.h>   // standard I/O functions (printf, fprintf, etc.)
+#include <stdlib.h>  // general utilities (exit, malloc, free, EXIT_FAILURE)
+#include <pthread.h> // POSIX threads API (pthread_create, pthread_t, pthread_join)
+#include <unistd.h>  // POSIX misc utilities (sleep, pause, usleep, pause)
 
+
+/**
+ * @brief Thread callback function that continuously prints a message
+ * 
+ * This function serves as a callback for a POSIX thread. It runs in an infinite loop,
+ * printing the message passed as argument every second.
+ *
+ * @param arg Pointer to the message string to be printed
+ * @return void* Returns NULL (thread return value)
+ * 
+ * @note The function never returns naturally due to infinite loop
+ * @warning Ensure proper thread termination mechanism is implemented if needed
+ */
 static void *thread_fn_callback(void *arg)
 {
     char *msg = (char *)arg;
