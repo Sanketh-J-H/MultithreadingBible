@@ -3,31 +3,47 @@
 #include <pthread.h> // POSIX threads API (pthread_create, pthread_t, pthread_join)
 #include <unistd.h>  // POSIX misc utilities (sleep, pause, usleep, pause)
 
-
 /**
  * @brief Thread callback function that continuously prints a message
- * 
+ *
  * This function serves as a callback for a POSIX thread. It runs in an infinite loop,
  * printing the message passed as argument every second.
  *
  * @param arg Pointer to the message string to be printed
  * @return void* Returns NULL (thread return value)
- * 
- * @note The function never returns naturally due to infinite loop
- * @warning Ensure proper thread termination mechanism is implemented if needed
+ *
+ * @note the thread will exit after printing the message 10 times
+ * to avoid infinite execution in this example.
  */
 static void *thread_fn_callback(void *arg)
 {
+    __uint8_t count = 0;
     char *msg = (char *)arg;
     while (1)
     {
         /* code */
-        printf("%s", msg);
+        printf("%s %d\n", msg, count);
         sleep(1);
+        count++;
+        if (count == 10)
+        {
+            printf("Child Thread completed its execution.\n");
+            pthread_exit(NULL);
+        }
     }
     return NULL;
 }
 
+/**
+ * @brief Creates a new thread for execution
+ *
+ * This function initializes and creates a new thread in the program.
+ * It handles the thread creation process and allocates necessary resources.
+ *
+ * @return void
+ *
+ * @note Thread creation may fail if system resources are exhausted
+ */
 void thread_create()
 {
     /* Thread 1 declaration
@@ -59,8 +75,10 @@ int main(int argc, char *argv[])
 {
     thread_create();
 
-    printf("Main thread is Paused.\n");
-    pause();
+    // printf("Main thread is Paused.\n");
+    // pause();
+    printf("Main thread completed its execution.\n");
+    pthread_exit(NULL); // terminate main thread but keep process alive until other threads exit
 
     return 0;
 }
