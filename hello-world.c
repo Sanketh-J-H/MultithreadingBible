@@ -1,7 +1,10 @@
-#include <stdio.h>   // standard I/O functions (printf, fprintf, etc.)
+#include <stdio.h>   // standard I/O functions (printf, fprintf, snprintf etc.)
 #include <stdlib.h>  // general utilities (exit, malloc, free, EXIT_FAILURE)
-#include <pthread.h> // POSIX threads API (pthread_create, pthread_t, pthread_join)
+#include <pthread.h> // POSIX threads API (pthread_create, pthread_t, pthread_join, pthread_exit)
 #include <unistd.h>  // POSIX misc utilities (sleep, pause, usleep, pause)
+#include <stdint.h>  // fixed-width integer types (__uint8_t)
+
+static uint8_t count = 0;
 
 /**
  * @brief Thread callback function that continuously prints a message
@@ -14,16 +17,16 @@
  *
  * @note the thread will exit after printing the message 10 times
  * to avoid infinite execution in this example.
- */
+ **/
 static void *thread_fn_callback(void *arg)
 {
-    __uint8_t count = 0;
+   
     char *msg = (char *)arg;
     while (1)
     {
         /* code */
         printf("%s %d\n", msg, count);
-        sleep(1);
+        usleep(500000); // sleep for 500 milliseconds
         count++;
         if (count == 10)
         {
